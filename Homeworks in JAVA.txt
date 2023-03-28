@@ -1,0 +1,1255 @@
+1.Folosind mecanismul preluării datelor de la tastatură cu un BufferedReader și InputStreamReader, preluați: un mesaj 
+de tip String, ziua ca intreg, luna de tip String si anul ca un întreg. Procesul se va încheia în momentul trecerii la o nouă 
+linie, când se va afișa fiecare câmp pe o linie separată. Afisati de asemenea toate campurile in ordinea in care au aparut. 
+Recomandare: Folosiți clasa StreamTokenizer, atributele sval, nval respectiv constanta TT_EOL.
+package lab8;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StreamTokenizer;
+
+public class Pb1 {
+
+	public static void main(String[] args) {
+	String mesaj = new String();
+	
+	
+	try {  BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+	
+	System.out.println("Introduceti data (zi, luna, anul): ");
+	
+	StreamTokenizer st = new StreamTokenizer(reader);
+	boolean eof = false;
+    
+	st.eolIsSignificant(true);
+
+	do {
+	int token = st.nextToken();
+        
+	switch (token) {
+		case StreamTokenizer.TT_EOF:
+		System.out.println("Sfarsit de fisier!");
+		eof = true;
+		break;
+              
+	case StreamTokenizer.TT_EOL:
+		System.out.println("Sfarsit de linie!");
+		break;
+              
+	case StreamTokenizer.TT_WORD:
+		System.out.println("(Cuvant) " + st.sval);
+		break;
+              
+	case StreamTokenizer.TT_NUMBER:
+		System.out.println("(Numar) " + st.nval);
+		break;
+              
+	default:
+		System.out.println((char) token + " intalnit.");
+              
+	if (token == '!') {
+		eof = true;
+	}
+	}
+	} while (!eof);	
+	
+	}
+	catch(IOException e){
+		System.out .println("Eroare citire" +e);
+		} 
+		
+		
+ 
+
+	}
+
+}
+
+2. Implementați aplicația anterioară folosind un fișier de intrare care conține un anumit număr de inregistrări cu 
+formatul specificat mai sus.
+
+package lab8;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StreamTokenizer;
+
+public class Pb2 {
+
+	public static void main(String[] args) {
+	String mesaj = new String();
+	
+	
+	try {  InputStream inputStream = new FileInputStream("D:\\New folder (2)\\Temeee\\bin\\lab8\\fisier.txt");
+		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+	
+	System.out.println("Introduceti data (zi, luna, anul): ");
+	
+	StreamTokenizer st = new StreamTokenizer(reader);
+	boolean eof = false;
+    
+	st.eolIsSignificant(true);
+
+	do {
+	int token = st.nextToken();
+        
+	switch (token) {
+		case StreamTokenizer.TT_EOF:
+		System.out.println("Sfarsit de fisier!");
+		eof = true;
+		break;
+              
+	case StreamTokenizer.TT_EOL:
+		System.out.println("Sfarsit de linie!");
+		break;
+              
+	case StreamTokenizer.TT_WORD:
+		System.out.println("(Cuvant) " + st.sval);
+		break;
+              
+	case StreamTokenizer.TT_NUMBER:
+		System.out.println("(Numar) " + st.nval);
+		break;
+              
+	default:
+		System.out.println((char) token + " intalnit.");
+              
+	if (token == '!') {
+		eof = true;
+	}
+	}
+	} while (!eof);	
+	System.out.print("\nNext token: ");
+	}
+	catch(IOException e){
+		System.out .println("Eroare citire" +e);
+		} 
+		
+		
+ 
+
+	}
+
+}
+
+3. Se citesc de la tastatură date formatate sub forma DD/MM/YYYY. Să se afișeze sub forma DD luna YYYY, unde luna 
+este forma expandată a MM și de asemenea să se afișeze și dacă anul este bisect. Programul se oprește prin apăsarea 
+tastei X sau x. Puteti folosi si clasa DateFormatSymbols pentru conversia lunii.
+
+import java.text.ParseException;
+	import java.text.SimpleDateFormat;
+	import java.util.Date;
+	import java.util.Scanner;
+
+	public class Pb3 {
+
+		public static void main(String[] args) {
+			Scanner sc = new Scanner (System.in);
+			 System.out.println("Introduceti sirul: ");
+			 String data = sc.next();
+			 String pattern = "dd/MM/yyyy";
+			 String pattern2 = "dd/MMMM/yyyy";
+	         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+	         SimpleDateFormat dateFormat2 = new SimpleDateFormat(pattern2);
+	        
+	         try {
+	             
+	             Date date = dateFormat.parse(data);
+	             String str = dateFormat2.format(date);
+	            
+	             System.out.println(str);
+	         } catch (ParseException e) {
+	             e.printStackTrace();
+	             return;
+	         }
+	         
+	        
+	             System.out.println("Apasa x pentru a iesi din program");
+	  
+	             String st = sc.next();
+	             if (st.equals("x")&&st.equals("X")) {
+	            	 
+	                 System.exit(0);
+	             
+	             }
+	  
+	         }
+		}
+
+4. Creați o clasă Calculator ce are implementate metode de adunare, scădere, înmulțire și împărțire. Metodele vor avea 
+ca intrare tipuri de date generice și vor returna rezultatul conform acestor date. De exemplu, suma a doi întregi va 
+returna tot un întreg, pentru două numere de tip float se va returna tot un float
+
+class Calculator<T extends Number> {
+	public  <M extends Number> double adunare (M x, M y) {
+	double suma;
+	suma = x.doubleValue() + y.doubleValue();
+	
+	return suma;
+	
+	}
+	public  <M extends Number> double scadere (M x, M y) {
+		double diff;
+		diff = x.doubleValue() - y.doubleValue();
+		
+		return diff;
+	}
+		public  <M extends Number> double inmultire (M x, M y) {
+			double produs;
+			produs = x.doubleValue() * y.doubleValue();
+		
+			
+			return produs;
+		}
+			public  <M extends Number> double impartire (M x, M y) {
+				double cat;
+				cat = x.doubleValue() / y.doubleValue();
+				
+				return cat;
+			}
+		
+		}
+
+
+
+public class Pb2 {
+
+	public static void main(String[] args) {
+	
+		Calculator<Integer> ob1 = new Calculator<>();
+		System.out.println("Suma a doua numere intregi: " + ob1.adunare(23, 27));
+		System.out.println("Diferenta a doua numere intregi: " + ob1.scadere(55, 25));
+		System.out.println("Produsul a doua numere intregi: " + ob1.inmultire(34, 22));
+		System.out.println("Catul a doua numere intregi: " + ob1.impartire(150, 50));
+		
+		Calculator<Double> ob2 = new Calculator<>();
+		System.out.println("Suma a doua numere rationale: " + ob2.adunare(2.3, 2.7));
+		System.out.println("Diferenta a doua numere rationale: " + ob2.scadere(5.5, 2.5));
+		System.out.println("Produsul a doua numere rationale: " + ob2.inmultire(3.4, 2.2));
+		System.out.println("Catul a doua numere rationale: " + ob2.impartire(1.5, 1.7));
+	
+		
+	}
+
+}
+
+5. Implementați o aplicație în cadrul căreia să aveți o clasă SetterGetter generică ce permite setarea și returnarea 
+valorilor atributelor pentru mai multe tipuri de obiecte. De exemplu, având clasele Copil, Adult și Pensionar, să se poată 
+seta și returna numele și vârsta acestora. Creați colecții cu intrări unice de obiecte de tip Copil, Adult, Pensionar pe care 
+să le populați cu date citite din consolă. Afișați datele preluate în diferite moduri.
+
+
+import java.util.Scanner;
+import java.util.Set;
+import java.util.HashSet;
+ class SetterGetter<T extends Persoana> {
+	 void setNume(T ob, String nume) {
+			ob.nume = nume;
+		}
+
+		String getNume(T ob) {
+			return ob.nume;
+		}
+
+		void setVarsta(T ob, int varsta) {
+			ob.varsta = varsta;
+		}
+
+		int getVarsta(T ob) {
+			return ob.varsta;
+		}
+		
+}
+
+ class Persoana {
+	protected String nume;
+	protected int varsta;
+
+	public Persoana() {}
+
+	public Persoana(String nume, int varsta) {
+		this.nume = nume;
+		this.varsta = varsta;
+	}
+}
+
+ class Pensionar extends Persoana {
+
+	public Pensionar() {}
+
+	public Pensionar(String nume, int varsta) {
+		super(nume, varsta);
+	}
+
+}
+
+ class Copil extends Persoana {
+
+	public Copil() {}
+
+	public Copil(String nume, int varsta) {
+		super(nume, varsta);
+	}
+
+}
+
+ class Adult extends Persoana {
+
+	public Adult() {}
+
+	public Adult(String nume, int varsta) {
+		super(nume, varsta);
+	}
+
+}
+
+
+
+
+
+
+public class Pb3 {
+	private static Scanner sc = new Scanner(System.in);
+
+	public static void main(String[] args) {
+		Set<Copil> copii = addCopil();
+		Set<Adult> adulti=addAdult();
+		Set<Pensionar> pensionari= addPensionar();
+		
+		System.out.println("\nDatele afisate: ");
+		afisare(copii);
+		afisare(adulti);
+		afisare(pensionari);
+	}
+
+	private static Set<Copil> addCopil() {
+		
+			System.out.print("Introduceti numarul de copii: ");
+			int n = sc.nextInt();
+			
+
+			SetterGetter ob = new SetterGetter();
+			Set<Copil> ob1 = new HashSet<>();
+
+		
+			String nume;
+			int varsta;
+			for (int i = 0; i < n; i++) {
+				System.out.print("Copil nr: " + (i + 1) + "\nNume: ");
+				nume = sc.next();
+				System.out.print("Varsta: ");
+				varsta = sc.nextInt();
+
+				Copil x = new Copil();
+				ob.setVarsta(x, varsta);
+				ob.setNume(x, nume);
+				ob1.add(x);
+			}
+			return ob1;
+
+		
+	}
+
+	private static Set<Adult> addAdult() {
+		
+			System.out.print("Introduceti numarul de adulti: ");
+			int n = sc.nextInt();
+			
+
+			SetterGetter ob = new SetterGetter();
+			Set<Adult> ob1 = new HashSet<>();
+
+		
+			String nume;
+			int varsta;
+			for (int i = 0; i < n; i++) {
+				System.out.print("Adult nr: " + (i + 1) + "\nNume: ");
+				nume = sc.next();
+				System.out.print("Varsta: ");
+				varsta = sc.nextInt();
+
+				Adult x = new Adult();
+				ob.setVarsta(x, varsta);
+				ob.setNume(x, nume);
+				ob1.add(x);
+			}
+			return ob1;
+
+		
+	}
+
+	private static Set<Pensionar> addPensionar() {
+		
+			System.out.print("Introduceti numarul de pensionari: ");
+			int n = sc.nextInt();
+			
+
+			SetterGetter ob = new SetterGetter();
+			Set<Pensionar> ob1 = new HashSet<>();
+
+			
+			String nume;
+			int varsta;
+			for (int i = 0; i < n; i++) {
+				System.out.print("Pensionar nr: " + (i + 1) + "\nNume: ");
+				nume = sc.next();
+				System.out.print("Varsta: ");
+				varsta = sc.nextInt();
+
+				Pensionar x = new Pensionar();
+				ob.setVarsta(x, varsta);
+				ob.setNume(x, nume);
+				ob1.add(x);
+			}
+			return ob1;
+
+
+	}
+private static void afisare(Set<? extends Persoana> set) {
+		
+		
+
+			
+			SetterGetter ob = new SetterGetter();
+
+			for (Persoana instanceOfSet : set) {
+				System.out.println("\nNume: " + ob.getNume(instanceOfSet));
+				System.out.println("Varsta: " + ob.getVarsta(instanceOfSet));
+			}
+
+	
+	}
+
+	}
+
+6. Implementați o aplicație Java care folosește GridLayout pentru aranjarea în pagină a componentelor unei aplicații de 
+calcul (TextField pt. intrare/ieșire, butoane pentru numere, operații matematice, ștergerea ecranului, etc.).
+
+
+package L11;
+
+
+		import javax.swing.JButton;
+		import javax.swing.JFrame;
+		import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.TextField;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+		public class Pb1 {
+
+			public static void main(String[] args) {
+				
+				JFrame.setDefaultLookAndFeelDecorated(true);
+				JFrame frame = new JFrame(Calculator);
+				TextField txt;
+				 txt=new TextField(20);
+                 txt.setBackground(Color.pink);
+                 txt.setFont(new Font(Arial,Font.BOLD,20));
+             
+                 txt.setEditable(false);
+                 txt.setBackground(Color.white);                      
+                 txt.setText(0);
+                                
+                 
+				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				
+			
+				JButton b0 = new JButton(0);	
+				 b0.setBorder(new LineBorder(Color.BLACK));
+				JButton b1 = new JButton(1);	
+				 b1.setBorder(new LineBorder(Color.BLACK));
+				JButton b2 = new JButton(2);
+				 b2.setBorder(new LineBorder(Color.BLACK));
+				JButton b3 = new JButton(3);		
+				 b3.setBorder(new LineBorder(Color.BLACK));
+				JButton b4 = new JButton(4);
+				 b4.setBorder(new LineBorder(Color.BLACK));
+				JButton b5 = new JButton(5);		
+				 b5.setBorder(new LineBorder(Color.BLACK));
+				JButton b6 = new JButton(6);
+				 b6.setBorder(new LineBorder(Color.BLACK));
+				JButton b7 = new JButton(7);		
+				 b7.setBorder(new LineBorder(Color.BLACK));
+				JButton b8 = new JButton(8);
+				 b8.setBorder(new LineBorder(Color.BLACK));
+				JButton b9 = new JButton(9);
+				 b9.setBorder(new LineBorder(Color.BLACK));
+				JButton jb1 = new JButton();		
+				 jb1.setBorder(new LineBorder(Color.BLACK));
+				JButton jb2 = new JButton(+);		
+				 jb2.setBorder(new LineBorder(Color.BLACK));
+				JButton jb3 = new JButton();
+				 jb3.setBorder(new LineBorder(Color.BLACK));
+				JButton jb4 = new JButton(-);		
+				 jb4.setBorder(new LineBorder(Color.BLACK));
+				JButton jb5 = new JButton(%);
+				 jb5.setBorder(new LineBorder(Color.BLACK));
+				JButton jb6 = new JButton(Clear);	
+				 jb6.setBorder(new LineBorder(Color.BLACK));
+				
+			
+				JPanel panel = new JPanel();
+				panel.add(txt);
+				panel.setLayout(new GridLayout(6, 4));
+				panel.add(b0);
+				panel.add(b1);
+				panel.add(b2);
+				panel.add(b3);
+				panel.add(b4);
+				panel.add(b5);
+				panel.add(b6);
+				panel.add(b7);
+				panel.add(b8);
+				panel.add(b9);
+				panel.add(jb1);
+				panel.add(jb2);
+				panel.add(jb3);
+				panel.add(jb4);
+				panel.add(jb5);
+				panel.add(jb6);
+				
+				frame.add(panel);
+
+				
+				frame.pack();
+				frame.setVisible(true);
+				
+			}
+
+			
+		}
+
+
+
+7. Implementați o aplicație Java care folosește GridBagLayout pentru aranjarea în pagină a componentelor unei aplicații 
+de calcul (TextField pt. intrare/ieșire, butoane pentru numere, operații matematice, ștergerea ecranului, etc.).
+
+
+package L11;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.TextField;
+
+public class Pb2 {
+
+	public static void main(String[] args) {
+		
+		JFrame.setDefaultLookAndFeelDecorated(true);
+		JFrame frame = new JFrame("Calculator");
+				
+		
+		TextField txt;
+		 txt=new TextField(2);
+      
+         txt.setFont(new Font("Arial",Font.BOLD,20));
+     
+         txt.setEditable(false);
+         txt.setBackground(Color.white);                      
+         txt.setText("0");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		
+		JPanel panel = new JPanel();
+		GridBagLayout layout = new GridBagLayout();
+		panel.setLayout(layout);
+		GridBagConstraints gbc = new GridBagConstraints();
+
+		
+		
+		panel.add(txt);
+		 gbc.fill = GridBagConstraints.HORIZONTAL;
+	      gbc.gridx = 0; gbc.gridy = 0; 
+	      panel.add(new JButton("0"), gbc);        
+	      gbc.gridx = 1; gbc.gridy = 0;
+	      panel.add(new JButton("1"), gbc);
+	      gbc.gridx = 2; gbc.gridy = 0; 
+	      panel.add(new JButton("2"), gbc);
+	      gbc.gridx = 3; gbc.gridy = 0; 
+	      panel.add(new JButton("3"), gbc);
+	      gbc.gridx = 0; gbc.gridy = 1; 
+	      panel.add(new JButton("4"), gbc);
+	      gbc.gridx = 1; gbc.gridy = 1; 
+	      panel.add(new JButton("5"), gbc);
+	      gbc.gridx = 2; gbc.gridy = 1;
+	      panel.add(new JButton("6"), gbc);
+	      gbc.gridx = 3; gbc.gridy = 1; 
+	      panel.add(new JButton("7"), gbc);
+	      gbc.gridx = 0; gbc.gridy = 2; 
+	      panel.add(new JButton("8"), gbc);
+	      gbc.gridx = 1; gbc.gridy = 2; 
+	      panel.add(new JButton("9"), gbc);
+	      gbc.gridx = 2; gbc.gridy = 2; 
+	      panel.add(new JButton("*"), gbc);
+	      gbc.gridx = 3; gbc.gridy = 2;
+	      panel.add(new JButton("/"), gbc);
+	      gbc.gridx = 0; gbc.gridy = 3; 
+	      panel.add(new JButton("+"), gbc);
+	      gbc.gridx = 1; gbc.gridy = 3; 
+	      panel.add(new JButton("-"), gbc);
+	      gbc.gridx = 2; gbc.gridy = 3; 
+	      panel.add(new JButton("%"), gbc);
+	      gbc.gridx = 3; gbc.gridy = 3; 
+	      panel.add(new JButton("Clear"), gbc);
+	      gbc.gridwidth = 3;
+		
+		
+		
+		frame.add(panel);
+
+		
+		frame.pack();
+		frame.setVisible(true);
+
+	}
+
+}
+
+
+8.  Implementați o aplicație de tip TabbedView care afișează în fiecare panou grafic:
+- o zonă de desenare
+- componente pentru selectarea tipului de font, a mărimii de font și a culorii textului
+- componente pentru alegerea unei forme geometrice (dintr-un set predefinit) și a mărimii laturii / razei 
+
+
+package L11;
+
+import java.awt.*;
+import javax.swing.*;
+ 
+public class Exemplu extends JPanel{
+    	final static String DRAWINGPANEL = "Zona Desen";
+    	final static String FONTPANEL = "Selectare Font";
+    	final static String FORMPANEL = "Selectare Forma geometrica";
+    
+    	 
+   	public void addComponentToPane(Container pane) {
+        	JTabbedPane tabbedPane = new JTabbedPane();
+
+        	
+        	JPanel card1 = new JPanel() {
+        		 public void paintComponent(Graphics g) {
+        	    	   
+        	    	    g.setColor(Color.red);
+        	    	    g.drawRect(8, 9, 150, 150);
+        		 }
+        	};
+        	
+        	
+
+        	JPanel card2 = new JPanel(new GridBagLayout());
+            
+        	JLabel txt = new JLabel();
+        	txt.setText("Stil Font");
+        	 
+        	JLabel txt1 = new JLabel();
+        	txt1.setText("Dimensiune Font");
+        	
+        	JLabel txt2 = new JLabel();
+        	txt2.setText("Culoare Font");
+        	
+        	
+        	 Choice c = new Choice();    
+        	   c.add("Arial");    
+               c.add("Times New Roman");    
+               c.add("Italic");    
+               c.add("Serif");    
+               c.add("Bold");   
+                
+              
+               
+               Choice c1 = new Choice();
+               c1.add("1");    
+               c1.add("10");    
+               c1.add("25");    
+               c1.add("30");    
+               c1.add("40");  
+              
+               
+               Choice c2 = new Choice();
+               c2.add("Albastru");    
+               c2.add("Portocaliu");    
+               c2.add("Rosu");    
+               c2.add("Verde");    
+               c2.add("Galben");  
+               
+               GridBagConstraints gbc = new GridBagConstraints();
+               gbc.gridx=0;
+               gbc.gridy=0;
+               card2.add(txt,gbc);
+               gbc.gridx=1;
+               gbc.gridy=0;
+               card2.add(txt1,gbc);
+               gbc.gridx=2;
+               gbc.gridy=0;
+               card2.add(txt2,gbc);
+               gbc.gridx=0;
+               gbc.gridy=1;
+               card2.add(c,gbc);
+               gbc.gridx=1;
+               gbc.gridy=1;
+               card2.add(c1,gbc);
+               gbc.gridx=2;
+               gbc.gridy=1;
+               card2.add(c2,gbc);
+               
+               
+        	JPanel card3 = new JPanel(new GridBagLayout());
+        	JLabel t = new JLabel();
+        	t.setText("Forma Geometrica");
+        	 
+        	JLabel t1 = new JLabel();
+        	t1.setText("Marime raza");
+        	
+        	JLabel t2 = new JLabel();
+        	t2.setText("Marime latura");
+        	 Choice ch = new Choice();    
+      	     ch.add("Cerc");    
+             ch.add("Patrat");    
+             ch.add("Triunghi");    
+             ch.add("Dreptunghi");    
+             JTextField text = new JTextField();
+             text.setText("     ");
+             JTextField text2 = new JTextField();
+             text2.setText("     ");
+             gbc.gridx=0;
+             gbc.gridy=0;
+             card3.add(t,gbc);
+             gbc.gridx=1;
+             gbc.gridy=0;
+             card3.add(t1,gbc);
+             gbc.gridx=2;
+             gbc.gridy=0;
+             card3.add(t2,gbc);
+             gbc.gridx=0;
+             gbc.gridy=1;
+             card3.add(ch,gbc);
+             gbc.gridx=1;
+             gbc.gridy=1;
+             card3.add(text,gbc);
+             gbc.gridx=2;
+             gbc.gridy=1;
+             card3.add(text2,gbc);
+              
+            
+             
+             
+            
+             
+           
+        	
+        	tabbedPane.addTab(DRAWINGPANEL, card1);
+        	tabbedPane.addTab(FONTPANEL, card2);
+        	tabbedPane.addTab(FORMPANEL, card3);
+
+        	pane.add(tabbedPane, BorderLayout.CENTER);
+   	}
+    
+    	private static void createAndShowGUI() {
+        
+        	JFrame frame = new JFrame("Desen");
+        	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(300,300);
+          
+        	Exemplu demo = new Exemplu();
+        	demo.addComponentToPane(frame.getContentPane());
+             
+           
+        	
+        	frame.setVisible(true);
+    	}
+
+    	public static void main(String[] args) {
+        
+		try {
+            		UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+        	} 
+		catch (UnsupportedLookAndFeelException ex) {
+            		ex.printStackTrace();
+        	} 
+		catch (IllegalAccessException ex) {
+            		ex.printStackTrace();
+        	} 
+		catch (InstantiationException ex) {
+            		ex.printStackTrace();
+        	} 
+		catch (ClassNotFoundException ex) {
+            		ex.printStackTrace();
+        	}
+        
+
+ 
+9.  Să se creeze o aplicație Java în cadrul căreia există o clasă ce implementează interfața Runnable. Constructorul clasei 
+permite definirea unui nume asociat fiecărui obiect instanțiat din clasa respectivă și de asemenea clasa are un atribut 
+static ce contorizează numărul de obiecte instanțiate. Metoda run( ) a clasei va afișa numele obiectului de un număr de 
+ori egal cu valoarea contorului și cu o întârziere de 1000 msec între afișări. 
+
+package lab9;
+
+ class MyRunnable extends Thread implements Runnable {
+	String nume;
+
+	public static int count=0;  
+	 MyRunnable(String nume) {
+		 this.nume= nume;  
+		count++;
+	}
+	 
+	 public void run() {
+		
+			while(count!=0) {
+				System.out.println(this.nume);
+				try{
+					Thread.sleep(1000);
+				}
+				catch(InterruptedException e) {}
+				count--;
+				System.out.println();
+			}
+	 }
+
+public class Pb1{
+	public static void main(String[] args) {
+		
+		MyRunnable ob1 = new MyRunnable("Nume1");
+		MyRunnable ob2 = new MyRunnable("Nume2");
+		MyRunnable ob3 = new MyRunnable("Nume3");
+		MyRunnable ob4 = new MyRunnable("Nume4");
+		MyRunnable ob5 = new MyRunnable("Nume5");
+		ob1.start();
+		ob2.start();
+		ob3.start();
+		ob4.start();
+		ob5.start();
+	}
+
+	}
+	
+
+}
+
+10. Scrieti o aplicatie Java in care un fir de executie genereaza 30 numere aleatoare intre 0 si 30 si un alt fir de executie 
+afiseaza aria cercului cu raza generata de primul fir de executie, daca aceasta raza este divizibila cu 3.
+
+package lab9;
+import java.util.Random;
+public class Pb2 extends Thread{
+	 Random r = new Random();
+	public void run(){
+	System.out.println("Numerele aleatorii intre 0 si 30 generate: ");
+	for( int i=0;i<=30;i++) {
+		int n = r.nextInt(29);
+		System.out.println(n);
+		
+		 System.out.println("Aria cercului cu raza " + n + " este: " + Arie(n));
+	}
+	
+	}
+	public double Arie(int raza) {
+		double A=0;
+		if(raza%3==0)
+    	{ System.out.println("Raza este divizibila cu 3!");
+    		A=Math.PI*raza*raza;
+    	}
+		else {
+			System.out.println("Raza nu este divizibila cu 3!");
+		}
+		
+		return A;
+		
+	}
+	
+	
+	public static void main(String[] args) {
+		Pb2 ob=new Pb2();
+		ob.start();
+
+	}
+
+}
+
+11.  Scrieti o clasa pentru determinarea unui element din sirul lui Fibonacci. In clasa vor fi 2 metode, una care calculeaza 
+valoarea elementului si alta care afiseaza acea valoare. Folositi mecanismul de multithreading cu sincronizare, astfel 
+incat in timp ce un fir de executie realizeaza calculul, celalalt sa afiseze valorile intermediare (toate componentele sirului 
+pana la elementul calculat)
+
+package lab9;
+import java.util.Scanner;
+class Fibonacci extends Thread {
+	public Object lock;
+	Scanner sc=new Scanner(System.in);
+	public void run() {
+		System.out.println("Introduceti un element: ");
+		int n=sc.nextInt();
+		System.out.println("Elementul cu pozitia "+n+" din sirul lui Fibonacci este: "+calcFib(n));
+		afisareFib(n);
+	}
+	public  int calcFib(int f) {synchronized(lock){ 
+		 if (f <= 1)
+	            return f;
+		 else {
+	        return calcFib(f - 1) + calcFib(f - 2);
+		 }
+	}
+	
+}
+
+	public void afisareFib(int fib) {synchronized(lock){ 
+		
+		int f1=0;
+		int f2=1;
+		int f=f1+f2;
+		 System.out.print("Elementele sirului lui Fibonacci afisate pana la "+fib+":");
+		for(int i=0; i<fib-1;i++) {
+			f2=f1;
+			f1=f;
+			f=f1+f2;
+			 System.out.print(f2+" ");
+			
+			
+		}
+		
+	}
+}
+}
+
+
+public class Pb3 {
+
+	public static void main(String[] args) {
+		Pb3 ob=new Pb3();
+		Fibonacci thread=new Fibonacci();
+		thread.lock=ob;
+		thread.start();
+
+	}
+
+}
+
+12.  Creați o aplicație Java ce folosește accesul sincronizat la metode pentru excludere mutuală. Creați 3 fire de execuție 
+ce apelează simultan metode de incrementare și decrementare a unei variabile dintr-o altă clasă. Verificați dacă 
+rezultatele sunt cele așteptate. Eliminați blocurile sincronizate și re-evaluați rezultatele.
+
+package lab9;
+
+class Counter{
+
+	
+		
+	  int x = 15;
+
+	   public synchronized void increment(){
+		 x++;
+		  }
+	  public synchronized void decrement(){
+		 x--;
+	}
+}
+
+	public class Pb4 {
+	  public static void main(String[] args)throws InterruptedException {
+
+	    Counter ob = new Counter();
+	    Thread t1 = new Thread(new Runnable(){
+	      public void run(){
+	       
+	          ob.increment();
+	          ob.decrement();
+	      }
+	    });
+
+	    Thread t2 = new Thread(new Runnable(){
+	      public void run(){
+	      
+	          ob.increment();
+	          ob.decrement();
+	      }
+	    });
+	    Thread t3 = new Thread(new Runnable(){
+		      public void run(){
+		       
+		          ob.increment();
+		          ob.decrement();
+		      }
+		    });
+
+	    t1.start();
+	    t2.start();
+        t3.start();
+	    
+
+	    System.out.println("Valoarea = " + ob.x);
+	  }
+	}
+
+13.  Scrieți o aplicație Java ce calculează cel mai mare divizor comun a două numere mari (>100.000). Aplicația va citi de la 
+tastatură în mod continuu perechi de câte două numere și va lansa în execuție câte un thread pentru fiecare pereche 
+citită. Rezultatele vor fi afișate în consolă în momentul finalizării metodei de calcul a cmmdc.
+
+package lab9;
+
+
+import java.util.Scanner;
+class CMMDC extends Thread{
+	
+
+	
+	public synchronized void valori( ){ 
+		
+		Scanner sc = new Scanner(System.in);
+ 
+		System.out.print("Introduceti x: ");
+		int x = sc.nextInt();
+		System.out.print("Introduceti y: ");
+		int y = sc.nextInt();
+		if((x & y) > 100000) {
+		System.out.println("Cmmdc este: " +cmmdc(x,y));
+		}
+	}
+	public int cmmdc(int x, int y) {
+		
+		while(x!=y)
+		{
+			if(x>y)
+				x=x-y;
+			else y=y-x;
+		}
+		return y;
+	}
+}
+public class Pb5 {
+	public static void main(String[] args) {
+		
+		CMMDC ob = new CMMDC();
+	    Thread t1 = new Thread(new Runnable(){
+		      public void run(){
+		       ob.valori();
+		         
+		      }
+		    });
+
+		    Thread t2 = new Thread(new Runnable(){
+		      public void run(){
+		    	  ob.valori();
+		      }
+		    });
+		
+		    
+		    Thread t3 = new Thread(new Runnable(){
+			      public void run(){
+			    	  ob.valori();
+			          
+			      }
+			    });
+
+		    t1.start();
+		    t2.start();
+	        t3.start();
+		    
+
+		    ob.valori();
+	}
+}
+
+
+14.  Scrieți o aplicație de tip Frame în care afișați într-un Panel numele vostru și grupa din care faceți parte. Textul va fi de 
+culoare albastră și centrat atât pe orizontală, cât și pe verticală, ținând cont de dimensiunea panelului.
+
+package L10;
+
+
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+
+
+public class Pb1 {
+
+	public static void main(String[] args) {
+		JFrame f = new JFrame(" My Frame");
+		 f.setSize(300, 300);
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.setVisible(true);
+		 f.setLocationRelativeTo(null);
+		 
+		
+		JPanel p = new JPanel();
+		p.setBackground(Color.black);
+		p.setPreferredSize(new Dimension(300, 300));
+			
+		f.getContentPane().add(p);
+		f.pack();
+		f.setLayout(null);
+	
+		 JLabel jlabel = new JLabel("Muntean Marius");
+		jlabel.setForeground(Color.blue);
+		jlabel.setFont(new Font("Verdana",1,11));
+		jlabel.setBounds(100,100,100,30);
+	    p.add(jlabel);
+	     
+	    JLabel jlabel1 = new JLabel(" Grupa: 2127");
+	    jlabel1.setForeground(Color.blue);
+		jlabel1.setFont(new Font("Verdana",1,12));
+		jlabel1.setBounds(50,50,100,30);
+	    p.add(jlabel1);
+	  
+	   
+	    jlabel.setVerticalAlignment(JLabel.CENTER);
+	    jlabel.setHorizontalAlignment(JLabel.CENTER);
+	    jlabel1.setVerticalAlignment(JLabel.CENTER);
+	    jlabel1.setHorizontalAlignment(JLabel.CENTER);
+	    p.setLayout(new BorderLayout());
+	    p.add(jlabel, BorderLayout.CENTER);
+	    p.add(jlabel1, BorderLayout.CENTER);
+	}
+
+}
+
+15. Scrieți o aplicație de tip Frame care va desena într-un Canvas un cerc de culoare roșie tangent la dimensiunea cea mai 
+mică (înălțime, lățime) a componentei Canvas.
+
+package L10;
+
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.Dimension;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+class MyFrame extends Frame {
+
+	private static final long serialVersionUID = 1L;
+MyCanvas canvas;
+MyFrame(){
+
+setLayout(new FlowLayout());
+
+canvas = new MyCanvas();
+add(canvas);
+this.addWindowListener(new ExitListener());
+
+setSize(300, 300);
+setVisible(true);
+
+
+
+}
+}
+class MyCanvas extends Canvas{
+Graphics g;
+
+MyCanvas(){
+this.setSize(new Dimension(200, 200));
+this.setBackground(new Color(0, 0, 153));
+}
+@Override
+public void paint(Graphics g) {
+
+g.setColor(new Color(255, 0, 0));
+g.drawOval(8, 9, 185, 180);
+}
+}
+class ExitListener extends WindowAdapter {
+@Override
+public void windowClosing(WindowEvent event) {
+System.exit(0);
+}
+public class Pb2 {
+
+	public static void main(String[] args) {
+		MyFrame frame = new MyFrame();
+	}
+}
+}
+
+16.  Scrieți o aplicație de tip Frame ce afișează o imagine stocată local sub care este afișat și numele fișierului din care 
+provine, cu un font stabilit în prealabil și o culoare creată printr-o combinație de trei valori întregi (reprezentând 
+cantitățile de roșu, verde și albastru)
+
+package L10;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.image.*;
+import java.io.*;
+import javax.imageio.ImageIO;
+public class Pb3 {
+
+
+	Pb3() throws IOException{
+
+	
+		 
+		 
+		 
+		    JPanel panel = new JPanel(new BorderLayout());
+		 
+		    BufferedImage image = ImageIO.read(new File("D:\\New folder (2)\\L10\\bin\\L10\\imagine.jpg"));
+		    JLabel label = new JLabel(new ImageIcon(image));
+		 
+		
+		   
+		   
+		    JFrame frame = new JFrame("Fereastra imagine");
+		    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		 
+		   
+		    frame.add(panel); 
+		 
+		 
+		    frame.setVisible(true);
+		    frame.setSize(500,500);
+		    JLabel label1 = new JLabel("D:\\\\New folder (2)\\\\L10\\\\bin\\\\L10\\\\imagine.jpg",SwingConstants.CENTER);
+		   panel.setBackground(Color.DARK_GRAY);
+		    panel.add(label1, BorderLayout.SOUTH);
+		    panel.add(label, BorderLayout.NORTH);
+		    Color c = new Color(51, 204, 255);  
+		    label1.setBackground(c);
+		    label1.setOpaque(true);
+		    Font myFont1 = new Font("Arial", Font.BOLD, 17);
+	        label1.setFont(myFont1);
+		  }
+		
+	
+	
+	public static void main(String args[ ]) throws IOException{
+		new Pb3( );
+	 }
+
+}
+
+
+
+
+
+
+
+
+
+
